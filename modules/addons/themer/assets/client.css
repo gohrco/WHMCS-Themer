@@ -1,0 +1,89 @@
+@CHARSET "ISO-8859-1";
+
+#themer-wrapper p { margin: 0; }
+
+/* Logo Title */
+#themer-wrapper h2 {
+	border-bottom: 1px solid #e3e3e3;
+	font-size: 225%;
+	margin-top: 5px;
+	text-align: center;
+}
+#themer-wrapper h2 img { margin: -6px 5px 0 0; }
+
+#themer-wrapper h3 {
+	border-bottom: 1px solid #e3e3e3;
+	margin: 3px 5px;
+}
+
+/* Main Wrapper */
+#themer-wrapper {
+	/*border: 1px solid #e3e3e3;*/
+	display: table-row;
+	left: 0;
+	margin: 0;
+	padding: 0;
+	position: absolute;
+	top: 0;
+	width: 400px;
+	z-index: 2000;
+}
+
+/* The Slideout */
+#themer-slide {
+	background-color: #ffffff;
+	display: table-cell;
+	width: 350px;
+}
+
+
+/* Clickable Wrapper */
+#themer-clicker {
+	cursor: pointer;
+	display: table-cell;
+	vertical-align: top;
+	width: 50px;
+}
+
+#themer-clickinner {
+	background-color: #ffffff;
+	border-radius: 0 0 15px;
+	height: 200px;
+	margin: 0;
+	padding: 0;
+	width: 50px;
+}
+
+#themer-clickinner img {
+	display: block;
+	margin: 0 auto;
+	padding: 5px 0;
+	width: 32px;
+}
+
+#themer-clickinner span.txt {
+	display: block;
+    font-size: 150%;
+    font-weight: bold;
+    height: 50px;
+    left: 0;
+    margin-left: 15px;
+    margin-top: 150px;
+    top: 0;
+    white-space: nowrap;
+	-webkit-transform: rotate(270deg);
+    -webkit-transform-origin: left top;
+    -moz-transform: rotate(270deg);
+    -moz-transform-origin: left top;
+    -ms-transform: rotate(270deg);
+    -ms-transform-origin: left top;
+    -o-transform: rotate(270deg);
+    -o-transform-origin: left top;
+    transform: rotate(270deg);
+    transform-origin: left top;
+}
+
+
+#themer-wrapper .form-horizontal .control-group	{	margin-top: 5px; }
+#themer-wrapper .form-horizontal .control-label {	width: 80px; }
+#themer-wrapper .form-horizontal .controls { 		margin-left: 100px; }

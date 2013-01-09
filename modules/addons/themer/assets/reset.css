@@ -1,0 +1,195 @@
+@CHARSET "ISO-8859-1";
+
+#themer * { margin: 0px; padding: 0px; }
+
+#themer html, 
+#themer body, 
+#themer div, 
+#themer span, 
+#themer applet, 
+#themer object, 
+#themer iframe,
+#themer h1, 
+#themer h2, 
+#themer h3, 
+#themer h4, 
+#themer h5, 
+#themer h6, 
+#themer p, 
+#themer blockquote, 
+#themer pre,
+#themer a, 
+#themer abbr, 
+#themer acronym, 
+#themer address, 
+#themer big, 
+#themer cite, 
+#themer code,
+#themer del, 
+#themer dfn, 
+#themer em, 
+#themer font, 
+#themer img, 
+#themer ins, 
+#themer kbd, 
+#themer q, 
+#themer s, 
+#themer samp,
+#themer small, 
+#themer strike, 
+#themer strong, 
+#themer sub, 
+#themer sup, 
+#themer tt, 
+#themer var,
+#themer b, 
+#themer u, 
+#themer i, 
+#themer center,
+#themer dl, 
+#themer dt, 
+#themer dd, 
+#themer ol, 
+#themer ul, 
+#themer li,
+#themer fieldset, 
+#themer form, 
+#themer label, 
+#themer legend,
+#themer table, 
+#themer caption, 
+#themer tbody, 
+#themer tfoot, 
+#themer thead, 
+#themer tr, 
+#themer th, 
+#themer td {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-size: 100%;
+	/*)background: transparent;*/
+}
+
+#themer body {
+	line-height: 1;
+}
+
+#themer ol, 
+#themer ul {
+	list-style: none;
+}
+#themer blockquote, 
+#themer q {
+	quotes: none;
+}
+#themer blockquote:before, 
+#themer blockquote:after,
+#themer q:before, 
+#themer q:after {
+	content: '';
+	content: none;
+}
+
+/* remember to define focus styles! */
+#themer :focus {
+	outline: 0;
+}
+
+/* remember to highlight inserts somehow! */
+#themer ins {
+	text-decoration: none;
+}
+#themer del {
+	text-decoration: line-through;
+}
+
+/* tables still need 'cellspacing="0"' in the markup */
+#themer table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+
+/* Embedded styles to modify */
+#themer a {
+	color:#333;
+	text-decoration:underline;
+}
+
+#themer a:hover {
+	background: none repeat scroll 0 0 transparent;
+	color:#666;
+	text-decoration:none;
+}
+
+#themer {
+	background-color:#369;
+	background-image:url(images/bg_background.gif);
+	background-repeat:repeat-x;
+	margin:0;
+	padding:0;
+}
+
+#themer,
+#themer td,
+#themer th {
+	color:#666;
+	font-family:Lucida Sans Unicode, Lucida Grande, sans-serif;
+	font-size:12px;
+	padding: 10px;
+}
+
+#themer form {
+	margin:0;
+	padding:0;
+}
+
+#themer h1 {
+	border-bottom:1px solid #EBEBEB;
+	color:#1a4d80;
+	float:none;
+	font-size:24px;
+	font-weight:400;
+	margin:0 0 12px;
+	padding:0 0 3px;
+	text-transform: inherit;
+}
+
+#themer h2 {
+	border-bottom:1px solid #F5F5F5;
+	color:#333;
+	font-size:18px;
+	font-weight:400;
+	margin:0 0 5px;
+	padding:10px 0 3px;
+}
+
+#themer h3 {
+	color:#666;
+	font-size:16px;
+	font-weight:700;
+	margin:0;
+	padding:10px 0 5px;
+}
+
+#themer hr {
+	background-color:#EBEBEB;
+	border:0;
+	border-top:1px solid #EBEBEB;
+	height:0;
+	margin:10px 0;
+	overflow:hidden;
+}
+
+#themer input,
+#themer select,
+#themer textarea {
+	color:#666;
+	font-family:Lucida Sans Unicode, Lucida Grande, sans-serif;
+	font-size:12px;
+	margin:0;
+	padding:2px;
+}
+
