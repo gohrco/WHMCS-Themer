@@ -17,8 +17,8 @@
 				verbose="yes"
 				>
 					<fileset dir="${src.build}/">
-						<exclude name="${src.build}/modules/addons/themer/assets/**/*.*" />
-						<exclude name="${src.build}/modules/addons/themer/assets/*.*" />
+						<exclude name="/modules/addons/themer/assets/patterns/*.png" />
+						<exclude name="/modules/addons/themer/assets/patterns/*.jpg" />
 					</fileset>
 		</ftp>
 			

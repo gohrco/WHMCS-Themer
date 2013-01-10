@@ -7,10 +7,10 @@ LICENSE=GNU General Public License version 2, or later
 COPYRIGHT=2009 - 2013 Go Higher Information Services.  All rights reserved.
 #
 SERIES=1.0
-SHORT=101
-VERSION=1.0.1
+SHORT=102
+VERSION=1.0.2
 #
 MATURITY=rc
 ACCESS=Public
 DESCRIPTION=<p>This module permits you to customize your WHMCS theme on the fly!</p><p>Note that this module requires the Dunamis Framework</p><p>At this time this module does not work with J!WHMCS Integrator or Integrator 3.</p>
-ITEMACCESS=WHMCS Themer Active
+ITEMACCESS=WHMCS Themer AxsLvl
