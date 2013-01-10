@@ -1,0 +1,10 @@
+------------------------------------------------------------------------
+r6 | steven_gohigher | 2013-01-09 10:35:51 -0500 (Wed, 09 Jan 2013) | 1 line
+
++  Initial Commit
+------------------------------------------------------------------------
+r7 | steven_gohigher | 2013-01-09 20:30:00 -0500 (Wed, 09 Jan 2013) | 2 lines
+
+~  Updated various elements to reflect moving Bootstrap and Google api to Dunamis Framework
++  Ability to specify theme to view without having it saved in url (?usetheme=x)
+------------------------------------------------------------------------
