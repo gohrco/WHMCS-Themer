@@ -8,9 +8,12 @@ $path	= dirname( dirname( dirname( dirname(__FILE__) ) ) ) . DIRECTORY_SEPARATOR
 if ( file_exists( $path ) ) include_once( $path );
 /*-- Dunamis Inclusion --*/
 
-$dun	= & get_dunamis( 'themer' );
-$db		= dunloader( 'database', true );
-$config = dunloader( 'config', true );
+$dun		=	get_dunamis( 'themer' );
+$db			=	dunloader( 'database', true );
+$config 	=	dunloader( 'config', true );
+$valid		=	dunloader( 'license', 'themer' )->isValid();
+
+if (! $valid ) exit();
 
 // Lets start by cleaning up our system URI
 $oururi	= DunUri :: getInstance();
