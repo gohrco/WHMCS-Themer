@@ -29,6 +29,11 @@ else {
 	$tid	= $db->loadResult();
 }
 
+$m = null;
+if ( array_key_exists( 'm', $get ) ) {
+	$m = '#' . $get['m'] . ' ';
+}
+
 // Now lets load the parameters
 $db->setQuery( "SELECT `params` FROM `mod_themer_themes` WHERE `id` = '" . $tid . "'" );
 $params	= $db->loadResult();
@@ -43,24 +48,24 @@ $baseurl	= str_replace( 'css.php', '', $oururi->toString() );
  */
 if ( $css->fullwidth ) : ?>
 
-#whmcsheader {
+<?php echo $m; ?>#whmcsheader {
 	background: <?php echo $css->contentbg; ?>;
 	max-width: inherit;
 }
 
-.navbar .navbar-inner {
+<?php echo $m; ?>.navbar .navbar-inner {
 	width: inherit; -moz-border-radius: 0px;
 	-webkit-border-radius: 0px;
 	-o-border-radius: 0px;
 	border-radius: 0;
 }
 
-.whmcscontainer,
-.whmcscontainer .footer {
+<?php echo $m; ?>.whmcscontainer,
+<?php echo $m; ?>.whmcscontainer .footer {
 	background: transparent;
 }
 
-.footerdivider {
+<?php echo $m; ?>.footerdivider {
 	display: none;
 }
 
@@ -68,9 +73,9 @@ if ( $css->fullwidth ) : ?>
 else :
 ?>
 
-#whmcsheader,
-.whmcscontainer,
-.whmcscontainer .footer {
+<?php echo $m; ?>#whmcsheader,
+<?php echo $m; ?>.whmcscontainer,
+<?php echo $m; ?>.whmcscontainer .footer {
 	background: <?php echo $css->contentbg; ?>;
 }
 
@@ -95,65 +100,65 @@ $fonts = (object) array(
 		);
 ?>
 
-body,
-.navbar-search .search-query,
-input,
-button,
-select,
-textarea {
+body <?php echo $m; ?>,
+<?php echo $m; ?>.navbar-search .search-query,
+<?php echo $m; ?>input,
+<?php echo $m; ?>button,
+<?php echo $m; ?>select,
+<?php echo $m; ?>textarea {
 	font-family: "<?php echo $fonts->primary; ?>",Helvetica,Arial,sans-serif;
 }
 
-.whmcscontainer,
-p {
+<?php echo $m; ?>.whmcscontainer,
+<?php echo $m; ?>p {
 	font-family: "<?php echo $fonts->gen; ?>",Helvetica,Arial,sans-serif;
 	font-size: <?php echo $css->txtelemgfsize; ?>px;
 	line-height: <?php echo intval( ( 18 / 13 ) * $css->txtelemgfsize ); ?>px;
 	color: <?php echo $css->txtelemgfcolor; ?>;
 }
 
-.whmcscontainer h1,
-h1 {
+<?php echo $m; ?>.whmcscontainer h1,
+<?php echo $m; ?>h1 {
 	font-family: "<?php echo $fonts->h1; ?>",Helvetica,Arial,sans-serif;
 	font-size: <?php echo $css->txtelemh1size; ?>px;
 	line-height: <?php echo intval( ( 36 / 30 ) * $css->txtelemh1size ); ?>px;
 	color: <?php echo $css->txtelemh1color; ?>;
 }
 
-.whmcscontainer h2,
-h2 {
+<?php echo $m; ?>.whmcscontainer h2,
+<?php echo $m; ?>h2 {
 	font-family: "<?php echo $fonts->h2; ?>",Helvetica,Arial,sans-serif;
 	font-size: <?php echo $css->txtelemh2size ?>px;
 	line-height: <?php echo intval( ( 36 / 24 ) * $css->txtelemh2size ) ?>px;
 	color: <?php echo $css->txtelemh2color; ?>;
 }
 
-.whmcscontainer h3,
-h3 {
+<?php echo $m; ?>.whmcscontainer h3,
+<?php echo $m; ?>h3 {
 	font-family: "<?php echo $fonts->h3; ?>",Helvetica,Arial,sans-serif;
 	font-size: <?php echo $css->txtelemh3size ?>px;
 	line-height: <?php echo intval( ( 27 / 18 ) * $css->txtelemh3size ) ?>px;
 	color: <?php echo $css->txtelemh3color; ?>;
 }
 
-.whmcscontainer h4,
-h4 {
+<?php echo $m; ?>.whmcscontainer h4,
+<?php echo $m; ?>h4 {
 	font-family: "<?php echo $fonts->h4 ?>",Helvetica,Arial,sans-serif;
 	font-size: <?php echo $css->txtelemh4size ?>px;
 	line-height: <?php echo intval( ( 18 / 14 ) * $css->txtelemh4size ) ?>px;
 	color: <?php echo $css->txtelemh4color; ?>;
 }
 
-.whmcscontainer h5,
-h5 {
+<?php echo $m; ?>.whmcscontainer h5,
+<?php echo $m; ?>h5 {
 	font-family: "<?php echo $fonts->h5 ?>",Helvetica,Arial,sans-serif;
 	font-size: <?php echo $css->txtelemh5size ?>px;
 	line-height: <?php echo intval( ( 18 / 12 ) * $css->txtelemh5size ) ?>px;
 	color: <?php echo $css->txtelemh5color; ?>;
 }
 
-.whmcscontainer h6,
-h6 {
+<?php echo $m; ?>.whmcscontainer h6,
+<?php echo $m; ?>h6 {
 	font-family: "<?php echo $fonts->h6; ?>",Helvetica,Arial,sans-serif;
 	font-size: <?php echo $css->txtelemh6size ?>px;
 	line-height: <?php echo intval( ( 18 / 11 ) * $css->txtelemh6size ) ?>px;
@@ -185,8 +190,8 @@ $css->logo = $uri->toString();
 $imgdata = @getimagesize( $css->logo );
 ?>
 
-#whmcsimglogo > a > img { display: none; }
-#whmcsimglogo > a {
+<?php echo $m; ?>#whmcsimglogo > a > img { display: none; }
+<?php echo $m; ?>#whmcsimglogo > a {
 	background: url(' <?php echo $css->logo; ?>') no-repeat scroll 0 0 transparent;
 	display: block;
 	height: <?php echo $imgdata[1] ?>px;
@@ -211,7 +216,7 @@ switch ( $css->bodytype ) :
 // ------------------------------------
 case '1': ?>
 
-body {
+body <?php echo $m; ?>{
 	background-color: <?php echo $css->bodyoptnsolid ?>;
 }
 		
@@ -228,7 +233,7 @@ case '2':
 	// ------------------------------------
 	case '1' : ?>
 				
-body {
+body <?php echo $m; ?>{
 	background: <?php echo $css->bodyoptnfrom ?>;
 	background: -moz-linear-gradient(top,  <?php echo $css->bodyoptnfrom ?> 0%, <?php echo $css->bodyoptnto ?> 100%);
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,<?php echo $css->bodyoptnfrom ?>), color-stop(100%,<?php echo $css->bodyoptnto ?>));
@@ -248,7 +253,7 @@ body {
 	// ------------------------------------
 	case '2' : ?>
 
-body {
+body <?php echo $m; ?>{
 	background: <?php echo $css->bodyoptnfrom ?>;
 	background: -moz-linear-gradient(left,  <?php echo $css->bodyoptnfrom ?> 0%, <?php echo $css->bodyoptnto ?> 100%);
 	background: -webkit-gradient(linear, left top, right top, color-stop(0%,<?php echo $css->bodyoptnfrom ?>), color-stop(100%,<?php echo $css->bodyoptnto ?>));
@@ -266,7 +271,7 @@ body {
 		// ------------------------------------
 		case '3': ?>
 
-body {
+body <?php echo $m; ?>{
 	background: <?php echo $css->bodyoptnfrom ?>;
 	background: -moz-linear-gradient(-45deg,  <?php echo $css->bodyoptnfrom ?> 0%, <?php echo $css->bodyoptnto ?> 100%);
 	background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,<?php echo $css->bodyoptnfrom ?>), color-stop(100%,<?php echo $css->bodyoptnto ?>));
@@ -284,7 +289,7 @@ body {
 		// ------------------------------------
 		case '4': ?>
 		
-body {
+body <?php echo $m; ?>{
 	background: <?php echo $css->bodyoptnfrom ?>;
 	background: -moz-linear-gradient(45deg,  <?php echo $css->bodyoptnfrom ?> 0%, <?php echo $css->bodyoptnto ?> 100%);
 	background: -webkit-gradient(linear, left bottom, right top, color-stop(0%,<?php echo $css->bodyoptnfrom ?>), color-stop(100%,<?php echo $css->bodyoptnto ?>));
@@ -302,7 +307,7 @@ body {
 		// ------------------------------------
 		case '5': ?>
 		
-body {
+body <?php echo $m; ?>{
 	background: <?php echo $css->bodyoptnfrom ?>;
 	background: -moz-radial-gradient(center, ellipse cover,  <?php echo $css->bodyoptnfrom ?> 0%, <?php echo $css->bodyoptnto ?> 100%);
 	background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,<?php echo $css->bodyoptnfrom ?>), color-stop(100%,<?php echo $css->bodyoptnto ?>));
@@ -324,7 +329,7 @@ body {
 	// ------------------------------------
 	case '3': ?>
 	
-body {
+body <?php echo $m; ?>{
 	background: url('<?php echo $baseurl . 'assets/patterns/' . $css->bodyoptnpattern; ?>') repeat scroll 0 0 #EFEFEF;
 }
 	
@@ -335,7 +340,7 @@ body {
 	// ------------------------------------
 	case '4': ?>
 
-body {
+body <?php echo $m; ?>{
 	background: url('<?php echo $css->bodyoptnimage ?>') repeat scroll 0 0 #EFEFEF;
 }
 
@@ -354,9 +359,9 @@ endswitch;
 
 ?>
 
-a {			color: <?php echo $css->alinksstd ?>; }
-a:visited {	color: <?php echo $css->alinksvis ?>; }
-a:hover {	color: <?php echo $css->alinkshov ?>; }
+<?php echo $m; ?>a {			color: <?php echo $css->alinksstd ?>; }
+<?php echo $m; ?>a:visited {	color: <?php echo $css->alinksvis ?>; }
+<?php echo $m; ?>a:hover {	color: <?php echo $css->alinkshov ?>; }
 
 
 <?php 
@@ -372,8 +377,8 @@ a:hover {	color: <?php echo $css->alinkshov ?>; }
 
 ?>
 
-.navbar-inner,
-.footerdivider {
+<?php echo $m; ?>.navbar-inner,
+<?php echo $m; ?>.footerdivider {
 	background: <?php echo $css->navbarfrom ?>;
 	background: -moz-linear-gradient(top,  <?php echo $css->navbarfrom ?> 0%, <?php echo $css->navbarto ?> 100%);
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,<?php echo $css->navbarfrom ?>), color-stop(100%,<?php echo $css->navbarto ?>));
@@ -384,28 +389,28 @@ a:hover {	color: <?php echo $css->alinkshov ?>; }
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='<?php echo $css->navbarfrom ?>', endColorstr='<?php echo $css->navbarto ?>',GradientType=0 );
 }
 
-.navbar .nav > li > a,
-.navbar {
+<?php echo $m; ?>.navbar .nav > li > a,
+<?php echo $m; ?>.navbar {
 	color: <?php echo $css->navbartxt ?>;
 }
 
-.navbar .nav > li > a:hover {
+<?php echo $m; ?>.navbar .nav > li > a:hover {
 	color: <?php echo $css->navbarhov ?>;
 }
 
-.dropdown-menu,
-.dropdown-menu .divider {
+<?php echo $m; ?>.dropdown-menu,
+<?php echo $m; ?>.dropdown-menu .divider {
 	background-color: <?php echo $css->navbardropbg ?>;
 }
 
-.dropdown-menu li > a:hover,
-.dropdown-menu .active > a,
-.dropdown-menu .active > a:hover {
+<?php echo $m; ?>.dropdown-menu li > a:hover,
+<?php echo $m; ?>.dropdown-menu .active > a,
+<?php echo $m; ?>.dropdown-menu .active > a:hover {
 	background-color: <?php echo $css->navbardrophl ?>;
 	color: <?php echo $css->navbardropbg ?>;
 }
 
-.dropdown-menu a { color: <?php echo $css->navbardroptxt ?>; }
+<?php echo $m; ?>.dropdown-menu a { color: <?php echo $css->navbardroptxt ?>; }
 
 <?php 
 // End Navigation Bar
