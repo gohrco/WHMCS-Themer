@@ -135,7 +135,7 @@ class ThemerClientDunModule extends WhmcsDunModule
 		// Lets get the current theme
 		$settings = $this->_getActiveTheme();
 		
-		$doc	= & dunloader( 'document', true );
+		$doc	=	dunloader( 'document', true );
 		$check	=	array( 'font', 'txtelemgffont', 'txtelemh1font', 'txtelemh2font', 'txtelemh3font', 'txtelemh4font', 'txtelemh5font', 'txtelemh6font' );
 		//$data	=	array( "Helvetica Neue" );
 		$data	= array();
@@ -163,7 +163,7 @@ class ThemerClientDunModule extends WhmcsDunModule
 	{
 		global $whmcs;
 		
-		$db		= & dunloader( 'database', true );
+		$db		=	dunloader( 'database', true );
 		
 		if ( array_key_exists( 'preset', $whmcs->input ) ) {
 			$tid = $whmcs->input['preset'];
@@ -206,13 +206,13 @@ class ThemerClientDunModule extends WhmcsDunModule
 	 */
 	private function _permissionCheck( $full = true )
 	{
-		$config	= & dunloader( 'config', 'themer' );
-		$lic	= & dunloader( 'license', 'themer' );
+		$config	=	dunloader( 'config', 'themer' );
+		$lic	=	dunloader( 'license', 'themer' );
 		
 		// Lets see if we have a valid license first
 		if (! $lic->isValid() ) return false;
 		
-		$wconfig	= & dunloader( 'config', true );
+		$wconfig	=	dunloader( 'config', true );
 		$template	=   $wconfig->get( 'Template', 'portal' );
 		
 		if ( $template != 'default' ) return false;
@@ -252,8 +252,8 @@ class ThemerClientDunModule extends WhmcsDunModule
 	 */
 	private function _renderClientCss()
 	{
-		$db		= & dunloader( 'database', true );
-		$doc	= & dunloader( 'document', true );
+		$db		=	dunloader( 'database', true );
+		$doc	=	dunloader( 'document', true );
 		
 		// Add our CSS file first
 		$baseurl 	=   get_baseurl( 'themer' );
@@ -270,7 +270,7 @@ class ThemerClientDunModule extends WhmcsDunModule
 		// Now lets add the various Fonts needed
 		$ip = $GLOBALS['remote_ip'];
 		if ( ( $fonts = $this->_gatherFonts() ) ) {
-			$baseuri	= & DunUri :: getInstance( $baseurl );
+			$baseuri	= DunUri :: getInstance( $baseurl );
 			$doc->addStyleSheet( $baseuri->getScheme() . '://fonts.googleapis.com/css?family=' . $fonts . '&userIp=' . $ip . '&key=AIzaSyAIpf_-Sp0uZZl0LcSXSPtgQwnXqFUIAO4' );
 		}
 		
@@ -289,8 +289,8 @@ class ThemerClientDunModule extends WhmcsDunModule
 	 */
 	private function _renderClientBody()
 	{
-		$db		= & dunloader( 'database', true );
-		$form	= & dunloader( 'form', true );
+		$db		=	dunloader( 'database', true );
+		$form	=	dunloader( 'form', true );
 		$data	=	null;
 		
 		// Build the baseuri
@@ -354,7 +354,7 @@ class ThemerClientDunModule extends WhmcsDunModule
 	{
 		if (! $this->_permissionCheck() ) return;
 		
-		$doc	= & dunloader( 'document', true );
+		$doc	=	dunloader( 'document', true );
 		
 		$js = <<< JS
 jQuery(document).ready( function() {

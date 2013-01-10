@@ -151,9 +151,9 @@ HTML;
 	{
 		global $action, $whmcs;
 		
-		$doc	= & dunloader( 'document', true );
-		$db		= & dunloader( 'database', true );
-		$form	= & dunloader( 'form', true );
+		$doc	=	dunloader( 'document', true );
+		$db		=	dunloader( 'database', true );
+		$form	=	dunloader( 'form', true );
 		$data	=   null;
 		
 		switch ( $action ) {
@@ -273,7 +273,13 @@ HTML;
 				$form->setValue( 'license', $config->get( 'license' ), 'themer.license' );
 				
 				// Set status
-				$state	= ( strtotime( $parts['supnextdue'] ) >= strtotime( date("Ymd") ) ? 'success' : ( $parts['status'] == 'Invalid' ? 'important' : 'warning' ) );
+				if (! array_key_exists( 'supnextdue', $parts ) ) {
+					$state = 'important';
+				}
+				else {
+					$state	= ( strtotime( $parts['supnextdue'] ) >= strtotime( date("Ymd") ) ? 'success' : ( $parts['status'] == 'Invalid' ? 'important' : 'warning' ) );
+				}
+				
 				$sttxt	= ( $state == 'success' ? 'Active' : ( $state == 'important' ? 'Invalid License' : 'Expired' ) );
 				$form->setValue( 'status', '<span class="label label-' . $state . '"> ' . $sttxt . ' </span>', 'themer.license' );
 				
@@ -285,6 +291,9 @@ HTML;
 				if ( $state != 'important' ) {
 					$use	= array( 'registeredname', 'companyname', 'regdate', 'supnextdue' );
 					foreach ( $use as $i ) {
+						
+						// Check to see if we have the item
+						if (! array_key_exists( $i, $parts ) ) continue;
 						$info[]	= ( $i != 'supnextdue' ? t( 'themer.admin.themer.form.config.info.' . $i, $parts[$i] ) : t( 'themer.admin.themer.form.config.info.supnextdue', $state, $parts[$i] ) );
 					}
 				}
@@ -431,13 +440,12 @@ HTML;
 			// Save the theme settings
 			case 'themes' :
 				
-				// Check license
+				// Check license and task
 				if (! dunloader( 'license', 'themer' )->isValid() ) return;
-				
-				$tid	= $input['tid'];
-				
 				if (! array_key_exists( 'task', $input ) ) return;
-					
+				
+				if ( array_key_exists( 'tid', $input ) ) $tid = $input['tid'];
+				
 				switch( $input['task'] ) {
 					case 'addnew' :
 						$db->setQuery( "SELECT `params` FROM `mod_themer_themes` WHERE `id` = '1'" );

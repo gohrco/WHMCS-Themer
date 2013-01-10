@@ -84,7 +84,13 @@ function themer_upgrade($vars)
 	$thisvers	= "@fileVers@";
 	
 	while( $thisvers > $version ) {
-		$db->handleFile( 'sql' . DIRECTORY_SEPARATOR . 'upgrade-' . $version . '.sql', 'themer' );
+		$filename	= 'sql' . DIRECTORY_SEPARATOR . 'upgrade-' . $version . '.sql';
+		if (! file_exists( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . $filename ) ) {
+			$thisvers = $version;
+			break;
+		}
+		
+		$db->handleFile( $filename, 'themer' );
 		$db->setQuery( "SELECT `value` FROM `tbladdonmodules` WHERE `module` = 'themer' AND `setting` = 'version'" );
 		$version = $db->loadResult();
 	}

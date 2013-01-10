@@ -45,7 +45,7 @@ class ThemerTogglebtnDunFields extends DunFields
 			unset( $this->attributes['class'] );
 		}
 		
-		$attr		=	array_to_string( array_merge( $this->attributes, $options ) );
+		$attr		=	array_to_string( $this->attributes );
 		$optns		=	$this->options;
 		$oid		=	$this->_optid;
 		$oname		=	$this->_optname;

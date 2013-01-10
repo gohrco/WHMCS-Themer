@@ -41,7 +41,7 @@ class ThemerWebfontDunFields extends DunFields
 	public function __construct( $settings = array() )
 	{
 		foreach( array( 'primary', 'value' ) as $item ) {
-			if ( $item == 'primary' ) {
+			if ( $item == 'primary' && array_key_exists( 'primary', $settings ) ) {
 				$this->primary = $settings['primary'];
 				unset( $settings['primary'] );
 				continue;
@@ -159,7 +159,7 @@ class ThemerWebfontDunFields extends DunFields
 			$client->setDeveloperKey('AIzaSyAIpf_-Sp0uZZl0LcSXSPtgQwnXqFUIAO4');
 			
 			$service = new Google_WebfontsService($client);
-			$fonts = $service->webfonts->listWebfonts( $sort );
+			$fonts = $service->webfonts->listWebfonts( array( $sort ) );
 			
 			$limit	= ( $fret == '1' ? 100000 : 30 );
 			$count	= 0;
