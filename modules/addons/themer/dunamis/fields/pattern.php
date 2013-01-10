@@ -45,7 +45,7 @@ class ThemerPatternDunFields extends DunFields
 		$attr		= array_to_string( array_merge( $this->attributes, $options ) );
 		$optns		= $this->options;
 		
-		$form		= '<select id="' . $id . '" name="'.$name.'"'.$attr.">\n";
+		$form		= '<select id="' . $id . '" name="'.$name.'" '.$attr.">\n";
 		$oid		= $this->_optid;
 		$oname		= $this->_optname;
 		

@@ -14,12 +14,20 @@ $config = dunloader( 'config', true );
 
 // Lets start by cleaning up our system URI
 $oururi	= DunUri :: getInstance();
+$oururi->delVars();
 $sysuri	= DunUri :: getInstance( $config->get( 'SystemURL' ) );
 $sysuri->setScheme( $oururi->getScheme() );
 
-// Lets load the default theme we want to use
-$db->setQuery( "SELECT `value` FROM `mod_themer_settings` WHERE `key` = 'usetheme'" );
-$tid	= $db->loadResult();
+$get = $GLOBALS['_GET'];
+
+if ( array_key_exists( 'tid', $get ) ) {
+	$tid = $get['tid'];
+}
+else {
+	// Lets load the default theme we want to use
+	$db->setQuery( "SELECT `value` FROM `mod_themer_settings` WHERE `key` = 'usetheme'" );
+	$tid	= $db->loadResult();
+}
 
 // Now lets load the parameters
 $db->setQuery( "SELECT `params` FROM `mod_themer_themes` WHERE `id` = '" . $tid . "'" );

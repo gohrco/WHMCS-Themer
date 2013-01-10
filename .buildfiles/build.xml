@@ -35,4 +35,15 @@
 			<echo message="=====================================================" />
 	</target>
 	
+	<target name="deploy_project" depends="build_project">
+			<echo message="=====================================================" />
+			<echo message="Begin Deployment of Project" />
+			<echo message="=====================================================" />
+		<antcall target="deploy_all" />
+		<antcall target="deploy_dunamis" />
+			<echo message="=====================================================" />
+			<echo message="Completed Deployment of Project" />
+			<echo message="=====================================================" />
+	</target>
+	
 </project> 

@@ -78,8 +78,7 @@ class ThemerClientDunModule extends WhmcsDunModule
 		global $whmcs;
 		
 		// Handle save capability from front end
-		if (! is_object( $whmcs ) ) return;
-		if ( $this->_permissionCheck() && array_key_exists( 'themer', $whmcs->input ) ) $this->_saveSettings();
+		if ( $this->_permissionCheck() && is_object( $whmcs ) && array_key_exists( 'themer', $whmcs->input ) ) $this->_saveSettings();
 		
 		$baseurl 	=   get_baseurl( 'themer' );
 		$ln			=	"\n";
@@ -142,7 +141,7 @@ class ThemerClientDunModule extends WhmcsDunModule
 		$data	= array();
 		
 		foreach ( $check as $item ) {
-			if ( $settings->$item != '- use primary -' ) $data[] = $settings->$item;
+			if (! in_array( $settings->$item, array( '- use primary -', 'Helvetica Neue' ) ) ) $data[] = $settings->$item;
 		}
 		
 		if ( empty( $data ) ) return false;
@@ -155,16 +154,39 @@ class ThemerClientDunModule extends WhmcsDunModule
 	 * Method to gather the current active theme
 	 * @access		private
 	 * @version		@fileVers@
+	 * @param		bool		- $getid: true if we want the id only
 	 * 
 	 * @return		array of settings
 	 * @since		1.0.0
 	 */
-	private function _getActiveTheme()
+	private function _getActiveTheme( $getid = false )
 	{
+		global $whmcs;
+		
 		$db		= & dunloader( 'database', true );
 		
-		$db->setQuery( "SELECT `value` FROM `mod_themer_settings` WHERE `key` = 'usetheme'" );
-		$tid	= $db->loadResult();
+		if ( array_key_exists( 'preset', $whmcs->input ) ) {
+			$tid = $whmcs->input['preset'];
+		}
+		else if ( array_key_exists( 'tid', $whmcs->input ) && array_key_exists( 'tid', $whmcs->input ) ) {
+			$tid = $whmcs->input['tid'];
+		}
+		else if ( array_key_exists( 'usetheme', $whmcs->input ) && ! array_key_exists( 'preset', $whmcs->input ) ) {
+			$tid = $whmcs->input['usetheme'];
+			
+			$db->setQuery( "SELECT `id` FROM `mod_themer_themes` WHERE `id` = '" . $tid . "'" );
+			$tid	= $db->loadResult();
+		}
+		else {
+			$db->setQuery( "SELECT `value` FROM `mod_themer_settings` WHERE `key` = 'usetheme'" );
+			$tid	= $db->loadResult();
+		}
+		
+		if (! $tid ) {
+			$tid = '1';
+		}
+		
+		if ( $getid ) return $tid;
 		
 		$db->setQuery( "SELECT `params` FROM `mod_themer_themes` WHERE `id` = '" . $tid . "'" );
 		$params	= $db->loadResult();
@@ -235,11 +257,11 @@ class ThemerClientDunModule extends WhmcsDunModule
 		
 		// Add our CSS file first
 		$baseurl 	=   get_baseurl( 'themer' );
-		$baseuri	= & DunUri :: getInstance( $baseurl );
+		$wurl		=	get_baseurl( 'client' ) . 'includes/dunamis/whmcs/';
 		
 		if ( $this->_permissionCheck() ) {
-			$doc->addStyleSheet( $baseurl . 'assets/reset.css' );						// Reset CSS
-			$doc->addStyleSheet( $baseurl . 'bootstrap/css/themer.bootstrap.css' );		// Our bootstrap
+			$doc->addStyleSheet( $wurl . 'bootstrap/css/reset.php?m=themer' );
+			$doc->addStyleSheet( $wurl . 'bootstrap/css/bootstrap.php?m=themer' );
 			$doc->addStyleSheet( $baseurl . 'assets/client.css' );
 			$css	= "#themer { position: absolute; height: 0; }";
 			$doc->addStyleDeclaration( $css );
@@ -248,9 +270,12 @@ class ThemerClientDunModule extends WhmcsDunModule
 		// Now lets add the various Fonts needed
 		$ip = $GLOBALS['remote_ip'];
 		if ( ( $fonts = $this->_gatherFonts() ) ) {
+			$baseuri	= & DunUri :: getInstance( $baseurl );
 			$doc->addStyleSheet( $baseuri->getScheme() . '://fonts.googleapis.com/css?family=' . $fonts . '&userIp=' . $ip . '&key=AIzaSyAIpf_-Sp0uZZl0LcSXSPtgQwnXqFUIAO4' );
 		}
-		$doc->addStyleSheet( $baseurl . 'css.php' );
+		
+		$tid = $this->_getActiveTheme( true );
+		$doc->addStyleSheet( $baseurl . 'css.php?tid=' . $tid );
 	}
 	
 	
@@ -276,10 +301,9 @@ class ThemerClientDunModule extends WhmcsDunModule
 		$db->setQuery( "SELECT `name`, `id` FROM `mod_themer_themes` ORDER BY `name`" );
 		$form->setOption( 'preset', $db->loadObjectList(), 'themer.clientselect' );
 		
-		// Get the selected theme
-		$db->setQuery( "SELECT `value`, `name`, `params` FROM `mod_themer_settings` s INNER JOIN `mod_themer_themes` t ON s.value = t.id WHERE `key` = 'usetheme'" );
-		$values	= $db->loadObject();
-		$values->params = json_decode( $values->params, true );
+		$values	= new stdClass();
+		$values->value	= $this->_getActiveTheme( true );
+		$values->params = $this->_getActiveTheme();
 		foreach ( $values->params as $k => $v ) $values->$k = $v;
 		unset ( $values->params );
 		$values->preset = $values->value;
@@ -312,6 +336,7 @@ class ThemerClientDunModule extends WhmcsDunModule
 				.	'			' . $form->getButton( 'submit', array( 'class' => 'btn btn-primary btn-mini', 'value' => t( 'themer.client.themer.form.submit.update' ), 'name' => 'submit' ) )
 				.	'		</div>'
 				.	'	</div>'
+				.	'<input type="hidden" name="tid" value="' . $this->_getActiveTheme( true ) . '" />'
 				.	'<input type="hidden" name="themer" value="2" /></form>';
 		
 		return $data;
@@ -344,9 +369,11 @@ jQuery(document).ready( function() {
 	});
 });
 JS;
-		$baseurl 	=   get_baseurl( 'themer' );
 		
-		$doc->addScript( $baseurl . 'bootstrap/js/bootstrap.min.js' );				// Our javascript
+		$baseurl 	=   get_baseurl( 'client' );
+		$doc->addScript( $baseurl . '/includes/dunamis/whmcs/bootstrap/js/bootstrap.min.js' );				// Our javascript
+		
+		$baseurl 	=   get_baseurl( 'themer' );
 		$doc->addScript( $baseurl . 'assets/client.js' );							// Our javascript
 		$doc->addScriptDeclaration( $js );
 	}
@@ -407,7 +434,14 @@ HTML;
 		
 		switch ( $task ) {
 			case '2' :
-				$db->setQuery( "SELECT `value`, `params` FROM `mod_themer_settings` s INNER JOIN `mod_themer_themes` t ON s.value = t.id WHERE `key` = 'usetheme'" );
+				if ( array_key_exists( 'tid', $whmcs->input ) ) {
+					$tid = $whmcs->input['tid'];
+					$db->setQuery( "SELECT '" . $tid . "' AS `value`, `params` FROM `mod_themer_themes` t WHERE t.id = '" . $tid . "'" );
+				}
+				else {
+					$db->setQuery( "SELECT `value`, `params` FROM `mod_themer_settings` s INNER JOIN `mod_themer_themes` t ON s.value = t.id WHERE `key` = 'usetheme'" );
+				}
+				//$db->setQuery( "SELECT `value`, `params` FROM `mod_themer_settings` s INNER JOIN `mod_themer_themes` t ON s.value = t.id WHERE `key` = 'usetheme'" );
 				$theme	= $db->loadObject();
 				$params = json_decode( $theme->params, false );
 				

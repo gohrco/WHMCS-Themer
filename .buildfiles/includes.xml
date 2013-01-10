@@ -37,4 +37,7 @@
 	<!-- Import Packaging Files -->
 	<import file="packaging/packaging-all.xml" />
 	
+	<!-- Import Deployment Files -->
+	<import file="deploy/deploy-all.xml" />
+	
 </project>

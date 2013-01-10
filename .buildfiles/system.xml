@@ -10,6 +10,7 @@
 		
 		<tstamp>
 			<format property="TODAY" pattern="yyyy MMMM d" />
+			<format property="RELDATE" pattern="yyyy-MM-dd" />
 		</tstamp>
 		
 		<!-- Copy Level Properties -->

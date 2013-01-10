@@ -1,10 +1,18 @@
 @CHARSET "ISO-8859-1";
 
+#themer,
+#themer input, 
+#themer button, 
+#themer select, 
+#themer textarea,
+#themer label > h4 { font-family: "Helvetica Neue",Helvetica,Arial,sans-serif; }
+
 #themer-wrapper p { margin: 0; }
 
 /* Logo Title */
 #themer-wrapper h2 {
 	border-bottom: 1px solid #e3e3e3;
+	font-family: "Helvetica Neue", sans-serif;
 	font-size: 225%;
 	margin-top: 5px;
 	text-align: center;
@@ -13,6 +21,7 @@
 
 #themer-wrapper h3 {
 	border-bottom: 1px solid #e3e3e3;
+	font-family: "Helvetica Neue", sans-serif;
 	margin: 3px 5px;
 }
 
@@ -20,6 +29,7 @@
 #themer-wrapper {
 	/*border: 1px solid #e3e3e3;*/
 	display: table-row;
+	font-family: "Helvetica Neue", sans-serif;
 	left: 0;
 	margin: 0;
 	padding: 0;
@@ -33,6 +43,7 @@
 #themer-slide {
 	background-color: #ffffff;
 	display: table-cell;
+	font-family: "Helvetica Neue", sans-serif;
 	width: 350px;
 }
 
@@ -41,6 +52,7 @@
 #themer-clicker {
 	cursor: pointer;
 	display: table-cell;
+	font-family: "Helvetica Neue", sans-serif;
 	vertical-align: top;
 	width: 50px;
 }
@@ -48,6 +60,7 @@
 #themer-clickinner {
 	background-color: #ffffff;
 	border-radius: 0 0 15px;
+	font-family: "Helvetica Neue", sans-serif;
 	height: 200px;
 	margin: 0;
 	padding: 0;
@@ -56,6 +69,7 @@
 
 #themer-clickinner img {
 	display: block;
+	font-family: "Helvetica Neue", sans-serif;
 	margin: 0 auto;
 	padding: 5px 0;
 	width: 32px;
@@ -63,6 +77,7 @@
 
 #themer-clickinner span.txt {
 	display: block;
+	font-family: "Helvetica Neue", sans-serif;
     font-size: 150%;
     font-weight: bold;
     height: 50px;
@@ -87,3 +102,4 @@
 #themer-wrapper .form-horizontal .control-group	{	margin-top: 5px; }
 #themer-wrapper .form-horizontal .control-label {	width: 80px; }
 #themer-wrapper .form-horizontal .controls { 		margin-left: 100px; }
+#themer label > h4 { color: #333333; }
