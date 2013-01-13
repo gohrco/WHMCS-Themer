@@ -89,6 +89,6 @@ class ThemerTogglebtnDunFields extends DunFields
 		$id		= $this->getId();
 		$value	= $this->get( 'value' );
 		$value	= empty( $value ) ? array('1') : $value;
-		$doc->addScriptDeclaration( 'togglebtns(\'' . $id . '\', \'' . $value[0] . '\' );' );
+		$doc->addScriptDeclaration( 'jQuery("document").ready( function () { togglebtns(\'' . $id . '\', \'' . $value[0] . '\' ); });' );
 	}
 }

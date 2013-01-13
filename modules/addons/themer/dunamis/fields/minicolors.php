@@ -41,7 +41,6 @@ class ThemerMinicolorsDunFields extends DunFields
 			$data	= true;
 			$baseurl = get_baseurl( 'themer' );
 			$doc->addScript( $baseurl . 'assets/jquery.minicolors.js' );
-			$doc->addStyleSheet( $baseurl . 'assets/jquery.minicolors.css' );
 		}
 	}
 }

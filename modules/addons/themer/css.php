@@ -56,6 +56,7 @@ if ( $css->fullwidth ) : ?>
 	max-width: inherit;
 }
 
+<?php echo $m; ?>.topbar .fill,
 <?php echo $m; ?>.navbar .navbar-inner {
 	width: inherit; -moz-border-radius: 0px;
 	-webkit-border-radius: 0px;
@@ -193,15 +194,46 @@ $css->logo = $uri->toString();
 $imgdata = @getimagesize( $css->logo );
 ?>
 
+<?php 
+/**
+ * Hide the image in the header
+ * -------------------------------------------------
+ */?>
+<?php echo $m; ?>#whmcsimglogo > img,
 <?php echo $m; ?>#whmcsimglogo > a > img { display: none; }
+
+
+<?php 
+/**
+ * Place the image - but depends on version of WHMCS
+ * -------------------------------------------------
+ * 		WHMCS 5.1+
+ */
+if ( version_compare( DUN_ENV_VERSION, '5.1', 'ge' ) ) : ?>
+
+<?php echo $m; ?>#whmcslogo { padding: 20px 0; }
 <?php echo $m; ?>#whmcsimglogo > a {
-	background: url(' <?php echo $css->logo; ?>') no-repeat scroll 0 0 transparent;
+	background: url(' <?php echo $css->logo; ?>') no-repeat scroll 0 50% transparent;
 	display: block;
 	height: <?php echo $imgdata[1] ?>px;
 	width: <?php echo $imgdata[0] ?>px;
 }
 
-<?php 
+<?php
+/**
+ * 		WHMCS 5.0
+ */
+else : ?>
+<?php echo $m; ?>div#whmcsimglogo {
+	background: url(' <?php echo $css->logo; ?>') no-repeat scroll 0 50% transparent;
+	display: block;
+	height: <?php echo $imgdata[1] ?>px;
+	width: <?php echo $imgdata[0] ?>px;
+}
+
+<?php
+endif;
+
 // End Logo Handling
 
 
@@ -377,9 +409,19 @@ endswitch;
  * Navigation Bar
  * -----------------------------------------
  */
-
 ?>
 
+<?php 
+/**
+ * Navbar Background Color
+ * 		.footerdivider						// (common to all)
+ * 		.topbar-inner						// WHMCS 5.0
+ * 		.topbar .fill						// """""""""
+ * 		.navbar-inner						// WHMCS 5.1
+ * ---------------------------------------------------------------------
+ */ ?>
+<?php echo $m; ?>.topbar-inner,
+<?php echo $m; ?>.topbar .fill,
 <?php echo $m; ?>.navbar-inner,
 <?php echo $m; ?>.footerdivider {
 	background: <?php echo $css->navbarfrom ?>;
@@ -392,28 +434,91 @@ endswitch;
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='<?php echo $css->navbarfrom ?>', endColorstr='<?php echo $css->navbarto ?>',GradientType=0 );
 }
 
+
+<?php 
+/**
+ * Navbar Text Color
+ * 		.topbar .fill .whmcscontainer > ul > li > a			// WHMCS 5.0
+ * 		.topbar .fill .whmcscontainer						// """""""""
+ * 		.navbar .nav > li > a								// WHMCS 5.1
+ * 		.navbar												// """""""""
+ * ---------------------------------------------------------------------
+ */ ?>
+<?php echo $m; ?>.topbar .fill .whmcscontainer > ul > li > a,
+<?php echo $m; ?>.topbar .fill .whmcscontainer,
 <?php echo $m; ?>.navbar .nav > li > a,
 <?php echo $m; ?>.navbar {
 	color: <?php echo $css->navbartxt ?>;
 }
 
+
+<?php 
+/**
+ * Navbar Text Hover Color
+ * 		.topbar .fill .whmcscontainer > ul > li > a:hover	// WHMCS 5.0
+ * 		.navbar .nav > li > a:hover							// WHMCS 5.1
+ * ---------------------------------------------------------------------
+ */ ?>
+<?php echo $m; ?>.topbar .fill .whmcscontainer > ul > li > a:hover,
 <?php echo $m; ?>.navbar .nav > li > a:hover {
 	color: <?php echo $css->navbarhov ?>;
 }
 
+
+<?php 
+/**
+ * Navbar Submenus Background Color
+ * 		.topbar div > ul.secondary-nav .menu-dropdown		// WHMCS 5.0
+ * 		.topbar div > ul.secondary-nav .dropdown-menu		// """""""""
+ * 		.topbar div > ul .menu-dropdown .divider			// """""""""
+ * 		.topbar div > ul .dropdown-menu .divider			// """""""""
+ * 		.dropdown-menu										// WHMCS 5.1
+ * 		.dropdown-menu .divider								// """""""""
+ * ---------------------------------------------------------------------
+ */ ?>
+<?php echo $m; ?>.topbar div > ul.secondary-nav .menu-dropdown,
+<?php echo $m; ?>.topbar div > ul.secondary-nav .dropdown-menu,
+<?php echo $m; ?>.topbar div > ul .menu-dropdown .divider,
+<?php echo $m; ?>.topbar div > ul .dropdown-menu .divider,
 <?php echo $m; ?>.dropdown-menu,
 <?php echo $m; ?>.dropdown-menu .divider {
 	background-color: <?php echo $css->navbardropbg ?>;
 }
 
+
+<?php 
+/**
+ * Navbar Submenus Active Item Background and Color
+ * 		.topbar div > ul .menu-dropdown li a:hover	// WHMCS 5.0
+ * 		.topbar div > ul .dropdown-menu li a:hover	// """""""""
+ * 		.dropdown-menu li > a:hover					// WHMCS 5.1
+ * 		.dropdown-menu .active > a					// """""""""
+ * 		.dropdown-menu .active > a:hover			// """""""""
+ * ---------------------------------------------------
+ */ ?>
+<?php echo $m; ?>.topbar div > ul .menu-dropdown li a:hover,
+<?php echo $m; ?>.topbar div > ul .dropdown-menu li a:hover,
 <?php echo $m; ?>.dropdown-menu li > a:hover,
 <?php echo $m; ?>.dropdown-menu .active > a,
 <?php echo $m; ?>.dropdown-menu .active > a:hover {
-	background-color: <?php echo $css->navbardrophl ?>;
+	background: none repeat scroll 0 0 <?php echo $css->navbardrophl ?>;
 	color: <?php echo $css->navbardropbg ?>;
 }
 
-<?php echo $m; ?>.dropdown-menu a { color: <?php echo $css->navbardroptxt ?>; }
+
+<?php 
+/**
+ * Navbar Submenus Link Color
+ * 		.topbar div > ul .menu-dropdown li a		// WHMCS 5.0
+ * 		.topbar div > ul .dropdown-menu li a		// """""""""
+ * 		.dropdown-menu a							// WHMCS 5.1
+ * ---------------------------------------------------
+ */ ?>
+<?php echo $m; ?>.topbar div > ul .menu-dropdown li a,
+<?php echo $m; ?>.topbar div > ul .dropdown-menu li a,
+<?php echo $m; ?>.dropdown-menu a {
+	color: <?php echo $css->navbardroptxt ?>;
+}
 
 <?php 
 // End Navigation Bar

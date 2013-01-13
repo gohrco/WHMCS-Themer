@@ -141,6 +141,8 @@ function updateCss( field, value )
 	case 'navbardropbg' :
 		jQuery( '.dropdown-menu,.dropdown-menu .divider' ).css( 'background-color', value );
 		jQuery( '.dropdown-menu li > a,.dropdown-menu .active a' ).css( 'color', value );
+		jQuery( '.menu-dropdown,.menu-dropdown .divider' ).css( 'background-color', value );
+		jQuery( '.menu-dropdown li > a,.menu-dropdown .active a' ).css( 'color', value );
 		break;
 	case 'navbardroptxt' :
 		jQuery( '.dropdown-menu a' ).css('color', value );
@@ -261,7 +263,7 @@ function updateBody( type, from, to, dir )
 
 function updateNavbar( from, to )
 {
-	jQuery( '.navbar-inner,.footerdivider' )
+	jQuery( '.navbar-inner,.footerdivider,.topbar>.fill' )
 		.css( 'background', from )
 		.css( 'background', '-moz-linear-gradient(top,  '+from+' 0%, '+to+' 100%)' )
 		.css( 'background', '-webkit-gradient(linear, left top, left bottom, color-stop(0%,'+from+'), color-stop(100%,'+to+'))' )

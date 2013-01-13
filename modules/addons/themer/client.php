@@ -40,8 +40,6 @@ class ThemerClientDunModule extends WhmcsDunModule
 		// Be sure we can do this...
 		if (! $this->_permissionCheck( false ) ) return;
 		
-		dunloader( 'form', true )->loadForm( 'clientselect', 'themer' );
-		
 		$this->_renderClientCss();
 		$this->_renderClientJs();
 	}
@@ -58,7 +56,6 @@ class ThemerClientDunModule extends WhmcsDunModule
 	{
 		dunloader( 'language', true )->loadLanguage( 'themer' );
 		dunloader( 'hooks', true )->attachHooks( 'themer' );
-		
 	}
 	
 	
@@ -75,10 +72,10 @@ class ThemerClientDunModule extends WhmcsDunModule
 		// Be sure we can do this...
 		if (! $this->_permissionCheck() ) return null;
 		
-		global $whmcs;
+		$themer = dunloader( 'input', true )->getVar( 'themer', false );
 		
 		// Handle save capability from front end
-		if ( $this->_permissionCheck() && is_object( $whmcs ) && array_key_exists( 'themer', $whmcs->input ) ) $this->_saveSettings();
+		if ( $this->_permissionCheck() && $themer ) $this->_saveSettings();
 		
 		$baseurl 	=   get_baseurl( 'themer' );
 		$ln			=	"\n";
@@ -161,20 +158,17 @@ class ThemerClientDunModule extends WhmcsDunModule
 	 */
 	private function _getActiveTheme( $getid = false )
 	{
-		global $whmcs;
-		
 		$db		=	dunloader( 'database', true );
+		$input	=	dunloader( 'input', true );
 		
-		if ( array_key_exists( 'preset', $whmcs->input ) ) {
-			$tid = $whmcs->input['preset'];
-		}
-		else if ( array_key_exists( 'tid', $whmcs->input ) && array_key_exists( 'tid', $whmcs->input ) ) {
-			$tid = $whmcs->input['tid'];
-		}
-		else if ( array_key_exists( 'usetheme', $whmcs->input ) && ! array_key_exists( 'preset', $whmcs->input ) ) {
-			$tid = $whmcs->input['usetheme'];
-			
-			$db->setQuery( "SELECT `id` FROM `mod_themer_themes` WHERE `id` = '" . $tid . "'" );
+		$preset	=	$input->getVar( 'preset', false );
+		$tid	=	$input->getVar( 'tid', false );
+		$useth	=	$input->getVar( 'usetheme', false );
+		
+		if ( $preset )
+			$tid = $preset;
+		else if ( $useth && ! $preset ) {
+			$db->setQuery( "SELECT `id` FROM `mod_themer_themes` WHERE `id` = '" . $useth . "'" );
 			$tid	= $db->loadResult();
 		}
 		else {
@@ -260,11 +254,13 @@ class ThemerClientDunModule extends WhmcsDunModule
 		$wurl		=	get_baseurl( 'client' ) . 'includes/dunamis/whmcs/';
 		
 		if ( $this->_permissionCheck() ) {
-			$doc->addStyleSheet( $wurl . 'bootstrap/css/reset.php?m=themer' );
-			$doc->addStyleSheet( $wurl . 'bootstrap/css/bootstrap.php?m=themer' );
+			
+			load_bootstrap( 'themer' );
+			
 			$doc->addStyleSheet( $baseurl . 'assets/client.css' );
-			$css	= "#themer { position: absolute; height: 0; }";
+			$css	= "#themer { position: absolute; height: 0; z-index: 20000; }";
 			$doc->addStyleDeclaration( $css );
+			$doc->addStyleSheet( $baseurl . 'assets/jquery.minicolors.css' );
 		}
 		
 		// Now lets add the various Fonts needed
@@ -427,15 +423,13 @@ HTML;
 	 */
 	private function _saveSettings()
 	{
-		global $whmcs;
-		
 		$db		=   dunloader( 'database', true );
-		$task	=   $whmcs->input['themer'];
+		$input	=	dunloader( 'input', true );
+		$task	=   $input->getVar( 'themer', '1' );
 		
 		switch ( $task ) {
 			case '2' :
-				if ( array_key_exists( 'tid', $whmcs->input ) ) {
-					$tid = $whmcs->input['tid'];
+				if ( $tid = $input->getVar( 'tid', false ) ) {
 					$db->setQuery( "SELECT '" . $tid . "' AS `value`, `params` FROM `mod_themer_themes` t WHERE t.id = '" . $tid . "'" );
 				}
 				else {
@@ -446,8 +440,7 @@ HTML;
 				$params = json_decode( $theme->params, false );
 				
 				foreach ( $params as $k => $v ) {
-					if (! array_key_exists( $k, $whmcs->input ) ) continue;
-					$params->$k = $whmcs->input[$k];
+					$params->$k = $input->getVar( $k, $v );
 				}
 				
 				$theme->params = json_encode( $params );
@@ -459,7 +452,7 @@ HTML;
 			default:
 			case '1' :
 				
-				$tid	=   $whmcs->input['preset'];
+				$tid	=   $input->getVar( 'preset' );
 				$db->setQuery( "UPDATE `mod_themer_settings` SET `value` = '" . $tid . "' WHERE `key` = 'usetheme'" );
 				$db->query();
 				

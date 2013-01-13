@@ -1,5 +1,5 @@
 <?php defined('DUNAMIS') OR exit('No direct script access allowed');
-
+error_reporting(E_ALL);
 if (! defined( 'DUN_MOD_THEMER' ) ) define( 'DUN_MOD_THEMER', "@fileVers@" );
 
 class ThemerAdminDunModule extends WhmcsDunModule
@@ -60,11 +60,11 @@ class ThemerAdminDunModule extends WhmcsDunModule
 	 */
 	public function renderAdminOutput()
 	{
-		global $action, $whmcs;
-		if (! $action ) $action = 'themes';
+		$input	= dunloader( 'input', true );
+		$action	= $input->getVar( 'action', 'themes' );
+		$submit	= $input->getVar( 'submit', false );
 		
-		$input = $whmcs->input;
-		if ( isset( $input['submit'] ) ) {
+		if ( $submit ) {
 			$this->_saveForm();
 		}
 		
@@ -72,6 +72,7 @@ class ThemerAdminDunModule extends WhmcsDunModule
 		$baseurl 	=   get_baseurl( 'themer' );
 		
 		$doc->addStyleDeclaration( '#contentarea > div > h1, #content > h1 { display: none; }' );	// Wipes out WHMCS' h1
+		$doc->addStyleDeclaration( '.contentarea > h1 { display: none; }' );	// Wipes out WHMCS' h1 in 5.0.3
 		
 		load_bootstrap( 'themer' );
 		
@@ -79,7 +80,7 @@ class ThemerAdminDunModule extends WhmcsDunModule
 		$navbar = $this->_getNavigation();
 		$body	= $this->_getBody();
 		
-		return <<< HTML
+		$data	= <<< HTML
 <div style="float:left;width:100%;">
 	<div id="themer">
 		{$title}
@@ -87,7 +88,11 @@ class ThemerAdminDunModule extends WhmcsDunModule
 		{$body}
 	</div>
 </div>
+<div style="clear: both; " />
 HTML;
+	
+		return $data;
+		
 	}
 	
 	
@@ -149,7 +154,8 @@ HTML;
 	 */
 	private function _getBody()
 	{
-		global $action, $whmcs;
+		$input	= dunloader( 'input', true );
+		$action	= $input->getVar( 'action', 'themes' );
 		
 		$doc	=	dunloader( 'document', true );
 		$db		=	dunloader( 'database', true );
@@ -160,14 +166,16 @@ HTML;
 			
 			case 'themes' :
 				
-				$task	= ( array_key_exists( 'task', $whmcs->input ) ? $whmcs->input['task'] : null );
+				$task	= $input->getVar( 'task', false );
+				$sac	= $input->getVar( 'saveandclose', false );
+				$task	= $sac ? 'saveandclose' : $task;
 				
 				switch ( $task ) {
 					
 					// Edit a specific theme
 					case 'edittheme':
 						
-						$tid	= $whmcs->input['tid'];
+						$tid	= $input->getVar( 'tid', false );
 						
 						// Pull all the themes from the database
 						$db->setQuery( "SELECT * FROM `mod_themer_themes` WHERE `id` = '{$tid}'" );
@@ -191,6 +199,7 @@ HTML;
 						
 						break;
 					// The default action to take
+					case 'saveandclose' :
 					default:
 						
 						// Get the current theme being used on the front end
@@ -335,27 +344,21 @@ HTML;
 	 */
 	private function _getNavigation()
 	{
-		global $action, $whmcs;
+		$input	= dunloader( 'input', true );
+		$action	= $input->getVar( 'action', 'themes' );
+		$task	= $input->getVar( 'task', null );
 		
 		$uri	= DunUri :: getInstance('SERVER', true );
-		$uri->delVar( 'task' );
-		$uri->delVar( 'submit' );
+		$uri->delVars();
+		$uri->setVar( 'module', 'themer' );
 		
 		$html	= '<ul class="nav nav-pills">';
 		
 		foreach( array( 'themes', 'config', 'license' ) as $item ) {
 			
-			if ( $item == $action ) {
-				if ( array_key_exists( 'task', $whmcs->input ) ) {
-					if ( $whmcs->input['task'] != 'edittheme' ) {
-						$html .= '<li class="active"><a href="#">' . t( 'themer.admin.module.navbar.' . $item ) . '</a></li>';
-						continue;
-					}
-				}
-				else {
-					$html .= '<li class="active"><a href="#">' . t( 'themer.admin.module.navbar.' . $item ) . '</a></li>';
-					continue;
-				}
+			if ( $item == $action && $task != 'edittheme' ) {
+				$html .= '<li class="active"><a href="#">' . t( 'themer.admin.module.navbar.' . $item ) . '</a></li>';
+				continue;
 			}
 			
 			$uri->setVar( 'action', $item );
@@ -378,11 +381,11 @@ HTML;
 	 */
 	private function _getTitle()
 	{
-		global $action, $whmcs;
+		$input	= dunloader( 'input', true );
+		$action	= $input->getVar( 'action', 'themes' );
+		$task	= $input->getVar( 'task', null );
 		
-		$task = ( array_key_exists( 'task', $whmcs->input ) && ! empty( $whmcs->input['task'] ) ? '.' . $whmcs->input['task'] : null );
-		
-		return '<h1>' . t( 'themer.admin.module.title', t( 'themer.admin.module.title.' . $action . $task ) ) . '</h1>';
+		return '<h1>' . t( 'themer.admin.module.title', t( 'themer.admin.module.title.' . $action . ( $task ? '.' . $task : '' ) ) ) . '</h1>';
 	}
 	
 	
@@ -431,10 +434,9 @@ HTML;
 	 */
 	private function _saveForm()
 	{
-		global $action, $whmcs;
-		
 		$db		= dunloader( 'database', true );
-		$input	=   $whmcs->input;
+		$input	= dunloader( 'input', true );
+		$action	= $input->getVar( 'action', 'themes' );
 		
 		switch ( $action ) {
 			// Save the theme settings
@@ -442,16 +444,17 @@ HTML;
 				
 				// Check license and task
 				if (! dunloader( 'license', 'themer' )->isValid() ) return;
-				if (! array_key_exists( 'task', $input ) ) return;
+				if (! $input->getVar( 'task', false ) ) return;
 				
-				if ( array_key_exists( 'tid', $input ) ) $tid = $input['tid'];
+				$task	= $input->getVar( 'task', 'default' );
+				$tid	= $input->getVar( 'tid', null );
 				
-				switch( $input['task'] ) {
+				switch( $task ) {
 					case 'addnew' :
 						$db->setQuery( "SELECT `params` FROM `mod_themer_themes` WHERE `id` = '1'" );
 						$params	= $db->loadResult();
 						
-						$db->setQuery( "INSERT INTO `mod_themer_themes` (`name`, `params` ) VALUES ('" . $input['name'] . "', '" . $params . "' ); ");
+						$db->setQuery( "INSERT INTO `mod_themer_themes` (`name`, `params` ) VALUES ('" . $input->getVar( 'name', null ) . "', '" . $params . "' ); ");
 						$db->query();
 						break;
 					case 'delete' :
@@ -472,22 +475,38 @@ HTML;
 						
 					case 'edittheme' :
 						
-						$params	= array('fullwidth' => null,'contentbg' => null, 'font' => null,'logo' => null,'bodytype' => null,'bodyoptnsolid'	=> null,'bodyoptnfrom' => null,'bodyoptnto' => null,'bodyoptndir' => null,'bodyoptnpattern' => null,'bodyoptnimage' => null,'alinks'	=> null,'alinksstd' => null,'alinksvis' => null,'alinkshov' => null,'navbarfrom' => null,'navbarto' => null,'navbartxt' => null,'navbarhov' => null,'navbardropbg' => null,'navbardroptxt' => null,'navbardrophl' => null,'txtelemgffont' => null,'txtelemgfsize' => null,'txtelemgfcolor' => null,'txtelemh1font' => null,'txtelemh1size' => null,'txtelemh1color' => null,'txtelemh2font' => null,'txtelemh2size' => null,'txtelemh2color' => null,'txtelemh3font' => null,'txtelemh3size' => null,'txtelemh3color' => null,'txtelemh4font' => null,'txtelemh4size' => null,'txtelemh4color' => null,'txtelemh5font' => null,'txtelemh5size' => null,'txtelemh5color' => null,'txtelemh6font' => null,'txtelemh6size' => null,'txtelemh6color' => null,);
+						$params	= array(
+						'fullwidth' => 'string',
+						'contentbg' => 'string',
+						'font' => 'string',
+						'logo' => 'string',
+						'bodytype' => 'string',
+						'bodyoptnsolid'	=> 'string',
+						'bodyoptnfrom' => 'string',
+						'bodyoptnto' => 'string',
+						'bodyoptndir' => 'string',
+						'bodyoptnpattern' => 'string',
+						'bodyoptnimage' => 'string',
+						'alinks'	=> 'string',
+						'alinksstd' => 'string','alinksvis' => 'string','alinkshov' => 'string',
+						'navbarfrom' => 'string','navbarto' => 'string','navbartxt' => 'string','navbarhov' => 'string',
+						'navbardropbg' => 'string','navbardroptxt' => 'string','navbardrophl' => 'string',
+						'txtelemgffont' => 'string','txtelemgfsize' => 'string','txtelemgfcolor' => 'string',
+						'txtelemh1font' => 'string','txtelemh1size' => 'string','txtelemh1color' => 'string',
+						'txtelemh2font' => 'string','txtelemh2size' => 'string','txtelemh2color' => 'string',
+						'txtelemh3font' => 'string','txtelemh3size' => 'string','txtelemh3color' => 'string',
+						'txtelemh4font' => 'string','txtelemh4size' => 'string','txtelemh4color' => 'string',
+						'txtelemh5font' => 'string','txtelemh5size' => 'string','txtelemh5color' => 'string',
+						'txtelemh6font' => 'string','txtelemh6size' => 'string','txtelemh6color' => 'string',);
 						
-						foreach( $input as $key => $value ) {
-							if (! array_key_exists( $key, $params ) ) continue;
-							$params[$key] = $value;
+						foreach( $params as $key => $value ) {
+							$params[$key] = $input->getVar( $key, null, 'post', $value );
 						}
 						
 						$paramstring	= json_encode( $params );
 						
-						$db->setQuery( "UPDATE `mod_themer_themes` SET `name` = '" . $input['name'] . "', `description` = '" . $input['description'] . "', `params` = '{$paramstring}' WHERE `id` = '{$tid}'" );
+						$db->setQuery( "UPDATE `mod_themer_themes` SET `name` = '" . $input->getVar( 'name' ) . "', `description` = '" . $input->getVar( 'description' ) . "', `params` = '{$paramstring}' WHERE `id` = '{$tid}'" );
 						$db->query();
-						
-						// Check for save and close
-						if ( array_key_exists( 'saveandclose', $input ) ) {
-							$whmcs->input['task'] = null;
-						}
 						
 						break;
 						
@@ -501,19 +520,23 @@ HTML;
 				// Check license
 				if (! dunloader( 'license', 'themer' )->isValid() ) return;
 				
-				if (! array_key_exists( 'restrictuser', $input ) ) $input['restrictuser'] = array();
+				$config	= array(
+						'enable' => 'int',
+						'restrictip' => 'string',
+						'restrictuser' => 'array',
+						'fontselect' => 'int'
+						);
 				
-				$config	= array( 'enable', 'restrictip', 'restrictuser', 'fontselect' );
-				
-				foreach ( $config as $item ) {
-					$key = $item; $value = $input[$item];
+				foreach ( $config as $item => $filter ) {
+					$key = $item;
+					$value = $input->getVar( $item, null, 'post', $filter );
 					if ( is_array( $value ) ) $value = implode( '|', $value );
 					$db->setQuery( "UPDATE `mod_themer_settings` SET `value` = " . $db->Quote( $value ) . " WHERE `key` = '{$key}'" );
 					$db->query();
 				}
 				break;
 			case 'license' :
-				$save = array( 'license' => $input['license'], 'localkey' => null );
+				$save = array( 'license' => $input->getVar( 'license', null ), 'localkey' => null );
 				
 				foreach ( $save as $key => $value ) {
 					$db->setQuery( "UPDATE `mod_themer_settings` SET `value` = '{$value}' WHERE `key` = '{$key}'" );
