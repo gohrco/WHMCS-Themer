@@ -8,8 +8,10 @@ class ThemerMinicolorsDunFields extends DunFields
 	public function __construct( $settings = array() )
 	{
 		parent :: __construct( $settings );
-
+		$names	= $this->getPropertyNames();
+		
 		foreach ( $settings as $key => $value ) {
+			if ( in_array( $key, $names ) ) continue;
 			$this->attributes[$key] = $value;
 		}
 		
@@ -21,11 +23,10 @@ class ThemerMinicolorsDunFields extends DunFields
 	public function field( $options = array() )
 	{
 		$name	=   $this->name;
-		$value	=   $this->value;
-		
+		$value	=	$this->value;
 		
 		$attr	=   array_merge( $this->attributes, $options );
-		$field	=   '<input name="' . $name . '" value="' . $value . '" data-default="' . $value . '" type="minicolors" ' . array_to_string( $attr ) . ' />';
+		$field	=   '<input name="' . $name . '" type="minicolors" data-default="' . $value . '" ' . array_to_string( $attr ) . ' />';
 		
 		return $field;
 	}

@@ -2,6 +2,7 @@
 ob_start("ob_gzhandler");
 header("Content-type: text/css; charset: UTF-8");
 
+if (! defined( 'WHMCS' ) ) define( 'WHMCS', true );
 
 /*-- Dunamis Inclusion --*/
 $path	= dirname( dirname( dirname( dirname(__FILE__) ) ) ) . DIRECTORY_SEPARATOR . 'includes' . DIRECTORY_SEPARATOR . 'dunamis.php';
@@ -24,7 +25,7 @@ $sysuri->setScheme( $oururi->getScheme() );
 $get = $GLOBALS['_GET'];
 
 if ( array_key_exists( 'tid', $get ) ) {
-	$tid = $get['tid'];
+	$tid = mysql_real_escape_string( $get['tid'] );
 }
 else {
 	// Lets load the default theme we want to use

@@ -181,7 +181,7 @@ final class ThemerDunLicense extends DunObject
 		
 		// Set default branding
 		$results['branding']	= true;
-	
+		
 		// If we are invalid, then no addons to go through
 		if ( $results['geldige'] === false ) return $results;
 	
@@ -425,6 +425,7 @@ final class ThemerDunLicense extends DunObject
 			$postfields["domain"] = $_SERVER['SERVER_NAME'];
 			$postfields["ip"] = $usersip;
 			$postfields["dir"] = DUN_MOD_THEMER_PATH;
+			
 			$ch = curl_init();
 			curl_setopt($ch, CURLOPT_URL, $whmcsurl."modules/servers/licensing/verify.php");
 			curl_setopt($ch, CURLOPT_POST, 1);

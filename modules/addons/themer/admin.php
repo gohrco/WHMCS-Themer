@@ -1,5 +1,5 @@
 <?php defined('DUNAMIS') OR exit('No direct script access allowed');
-error_reporting(E_ALL);
+
 if (! defined( 'DUN_MOD_THEMER' ) ) define( 'DUN_MOD_THEMER', "@fileVers@" );
 
 class ThemerAdminDunModule extends WhmcsDunModule
@@ -75,7 +75,7 @@ class ThemerAdminDunModule extends WhmcsDunModule
 		$doc->addStyleDeclaration( '.contentarea > h1 { display: none; }' );	// Wipes out WHMCS' h1 in 5.0.3
 		
 		load_bootstrap( 'themer' );
-		
+		$doc->addStyleSheet( $baseurl . 'assets/jquery.minicolors.css' );
 		$title	= $this->_getTitle();
 		$navbar = $this->_getNavigation();
 		$body	= $this->_getBody();
@@ -500,12 +500,14 @@ HTML;
 						'txtelemh6font' => 'string','txtelemh6size' => 'string','txtelemh6color' => 'string',);
 						
 						foreach( $params as $key => $value ) {
-							$params[$key] = $input->getVar( $key, null, 'post', $value );
+							$params[$key] = $input->getVar( $key, null, 'request', $value );
 						}
 						
-						$paramstring	= json_encode( $params );
-						
-						$db->setQuery( "UPDATE `mod_themer_themes` SET `name` = '" . $input->getVar( 'name' ) . "', `description` = '" . $input->getVar( 'description' ) . "', `params` = '{$paramstring}' WHERE `id` = '{$tid}'" );
+						$name	= $db->Quote( $input->getVar( 'name' ) );
+						$desc	= $db->Quote( $input->getVar( 'description' ) );
+						$paramstring	= $db->Quote( json_encode( $params ), false );
+						$tid	= $db->Quote( $input->getVar( 'tid' ) );
+						$db->setQuery( "UPDATE `mod_themer_themes` SET `name` = " . $name . ", `description` = " . $desc . ", `params` = " . $paramstring . " WHERE `id` = " . $tid );
 						$db->query();
 						
 						break;
@@ -529,7 +531,7 @@ HTML;
 				
 				foreach ( $config as $item => $filter ) {
 					$key = $item;
-					$value = $input->getVar( $item, null, 'post', $filter );
+					$value = $input->getVar( $item, null, 'request', $filter );
 					if ( is_array( $value ) ) $value = implode( '|', $value );
 					$db->setQuery( "UPDATE `mod_themer_settings` SET `value` = " . $db->Quote( $value ) . " WHERE `key` = '{$key}'" );
 					$db->query();
