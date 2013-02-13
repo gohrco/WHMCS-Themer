@@ -38,6 +38,7 @@ $form	= array(
 				),
 		'logo'		=> array(
 				'order'			=> 17,
+				'id'			=> 'mylogo',
 				'type'			=> 'text',
 				'value'			=> get_baseurl( 'client' ) . 'templates/default/img/whmcslogo.png',
 				'validation'	=> '',
