@@ -84,6 +84,15 @@ function themer_upgrade($vars)
 	$thisvers	= "@fileVers@";
 	
 	while( $thisvers > $version ) {
+		
+		// Delete toggleyn field file
+		if ( version_compare( $version, '1.0.4', 'le' ) ) {
+			$path	=	dirname( __FILE__ ) . 'dunamis' . DIRECTORY_SEPARATOR . 'fields' . DIRECTORY_SEPARATOR; 
+			if ( file_exists( $path . 'toggleyn.php' ) ) {
+				unlink( $path . 'toggleyn.php' );
+			}
+		}
+		
 		$filename	= 'sql' . DIRECTORY_SEPARATOR . 'upgrade-' . $version . '.sql';
 		if (! file_exists( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . $filename ) ) {
 			$thisvers = $version;

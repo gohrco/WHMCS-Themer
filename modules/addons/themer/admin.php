@@ -88,7 +88,7 @@ class ThemerAdminDunModule extends WhmcsDunModule
 		{$body}
 	</div>
 </div>
-<div style="clear: both; " />
+<div style="clear: both; "> </div>
 HTML;
 	
 		return $data;
@@ -532,6 +532,7 @@ HTML;
 				foreach ( $config as $item => $filter ) {
 					$key = $item;
 					$value = $input->getVar( $item, null, 'request', $filter );
+					
 					if ( is_array( $value ) ) $value = implode( '|', $value );
 					$db->setQuery( "UPDATE `mod_themer_settings` SET `value` = " . $db->Quote( $value ) . " WHERE `key` = '{$key}'" );
 					$db->query();
