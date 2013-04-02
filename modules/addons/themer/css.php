@@ -243,6 +243,14 @@ else : ?>
 <?php
 endif;
 
+else : // No logo found, so lets leave a nice note in the css
+?>
+
+/* ------------------------  Attention  ------------------------------- */
+/* The logo you entered could not be found - please verify its location */
+/* -------------------------------------------------------------------- */
+
+<?php 
 endif; // End $exists check
 // End Logo Handling
 
