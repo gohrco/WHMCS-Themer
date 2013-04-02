@@ -10,6 +10,8 @@ $lang['form.cancel']				= 'Cancel';
 
 $lang['admin.toggleyn.enabled']		= 'Enabled';
 $lang['admin.toggleyn.disabled']	= 'Disabled';
+$lang['form.toggleyn.enabled']		= 'Enabled';
+$lang['form.toggleyn.disabled']		= 'Disabled';
 
 //
 //	Admin Configuration Translations

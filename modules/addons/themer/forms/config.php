@@ -7,6 +7,8 @@ $form	= array(
 				'type'			=> 'toggleyn',
 				'value'			=> true,
 				'validation'	=> '',
+				'labelon'		=> 'themer.form.toggleyn.enabled',
+				'labeloff'		=> 'themer.form.toggleyn.disabled',
 				'label'			=> 'themer.admin.themer.form.config.label.enable',
 				'description'	=> 'themer.admin.themer.form.config.description.enable',
 				),

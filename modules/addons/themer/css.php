@@ -180,22 +180,30 @@ body <?php echo $m; ?>,
  * -----------------------------------------
  */
 
-// Check if we are using an internal reference
+
 if ( DunUri :: isInternal( $css->logo ) ) {
-	$uri	= clone( $sysuri );
-	$uri->setPath( rtrim( $uri->getPath(), '/' ) . '/' . trim( $css->logo, '/' ) );
+	$exists	=	file_exists( DUN_ENV_PATH . $css->logo );
 }
 else {
-	$uri = DunUri :: getInstance( $css->logo );
-	$uri->setScheme( $oururi->getScheme() );
+	$exists	=	( file_get_contents( $css->logo ) !== false ? true : false );
 }
 
-$css->logo = $uri->toString();
+// Be sure the image exists
+if ( $exists ) :
+	// Check if we are using an internal reference
+	if ( DunUri :: isInternal( $css->logo ) ) {
+		$uri	= clone( $sysuri );
+		$uri->setPath( rtrim( $uri->getPath(), '/' ) . '/' . trim( $css->logo, '/' ) );
+	}
+	else {
+		$uri = DunUri :: getInstance( $css->logo );
+		$uri->setScheme( $oururi->getScheme() );
+	}
+	
+	$css->logo = $uri->toString();
 
-$imgdata = @getimagesize( $css->logo );
-?>
-
-<?php 
+	$imgdata = @getimagesize( $css->logo );
+ 
 /**
  * Hide the image in the header
  * -------------------------------------------------
@@ -214,7 +222,7 @@ if ( version_compare( DUN_ENV_VERSION, '5.1', 'ge' ) ) : ?>
 
 <?php echo $m; ?>#whmcslogo { padding: 20px 0; }
 <?php echo $m; ?>#whmcsimglogo > a {
-	background: url(' <?php echo $css->logo; ?>') no-repeat scroll 0 50% transparent;
+	background: url( '<?php echo $css->logo; ?>' ) no-repeat scroll 0 50% transparent;
 	display: block;
 	height: <?php echo $imgdata[1] ?>px;
 	width: <?php echo $imgdata[0] ?>px;
@@ -226,7 +234,7 @@ if ( version_compare( DUN_ENV_VERSION, '5.1', 'ge' ) ) : ?>
  */
 else : ?>
 <?php echo $m; ?>div#whmcsimglogo {
-	background: url(' <?php echo $css->logo; ?>') no-repeat scroll 0 50% transparent;
+	background: url( '<?php echo $css->logo; ?>' ) no-repeat scroll 0 50% transparent;
 	display: block;
 	height: <?php echo $imgdata[1] ?>px;
 	width: <?php echo $imgdata[0] ?>px;
@@ -235,6 +243,7 @@ else : ?>
 <?php
 endif;
 
+endif; // End $exists check
 // End Logo Handling
 
 

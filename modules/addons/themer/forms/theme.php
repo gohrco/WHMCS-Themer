@@ -24,6 +24,8 @@ $form	= array(
 				'type'			=> 'toggleyn',
 				'value'			=> false,
 				'validation'	=> '',
+				'labelon'		=> 'themer.form.toggleyn.enabled',
+				'labeloff'		=> 'themer.form.toggleyn.disabled',
 				'label'			=> 'themer.admin.themer.form.theme.label.fullwidth',
 				'description'	=> 'themer.admin.themer.form.theme.description.fullwidth',
 				),
