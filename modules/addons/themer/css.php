@@ -1,8 +1,42 @@
 <?php
-ob_start("ob_gzhandler");
-header("Content-type: text/css; charset: UTF-8");
 
+// ----	BEGIN THEMER-1
+//		CSS file renders nothing due to changes in environment setting
+//		We must initialize the WHMCS application unfortunately on this css.php call
+// ---------------------------------------------------
+ob_start();	// start output buffering
+define( "CLIENTAREA", true );
+
+$path	=	dirname( dirname( dirname( dirname( __FILE__ ) ) ) ) . DIRECTORY_SEPARATOR;
+$files	=	array(
+		'dbconnect.php',
+		);
+
+// Cycle through our array of files to require and get em
+foreach ( $files as $file ) {
+	if ( file_exists( $path . $file ) ) {
+		require_once( $path . $file );
+	}
+}
+
+ob_end_clean(); // kill whatever was just output
+
+// ---------------------------------------------------
+// Let's restart output buffering and start sending headers
+ob_start("ob_gzhandler");
+header( "Content-type: text/css" );
+header( "X-Content-Type-Options: nosniff" );
+
+/*$gmdate_mod = gmdate( 'D, d M Y H:i:s' ) . ' GMT';
+
+header("Last-Modified: $gmdate_mod");
+header('Content-type: text/css');
+header('Expires: ' . date('D, d M Y H:i:s', time() - (60*60*24*45)) . ' GMT');
+*/
 if (! defined( 'WHMCS' ) ) define( 'WHMCS', true );
+//	---- END THEMER-1
+// ---------------------------------------------------
+
 
 /*-- Dunamis Inclusion --*/
 $path	= dirname( dirname( dirname( dirname(__FILE__) ) ) ) . DIRECTORY_SEPARATOR . 'includes' . DIRECTORY_SEPARATOR . 'dunamis.php';

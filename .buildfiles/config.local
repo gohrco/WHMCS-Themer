@@ -8,4 +8,4 @@ LOCATION_BUILDDIR=C:/Extensions/WHMCS Themer/Builds/
 LOCATION_PACKAGES=C:/Extensions/WHMCS Themer/Archives/
 
 <!-- Location of local server root directory (not including subdirectories of specific applications -->
-LOCATION_LOCALHOME=C:/xampp/htdocs/__Integrator 2.4.0 WC/
+LOCATION_LOCALHOME=C:/xampp/www/mods/
