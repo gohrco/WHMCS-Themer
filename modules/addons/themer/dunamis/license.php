@@ -4,7 +4,12 @@ if (! defined( "DUN_MOD_THEMER_SECRET" ) ) define ( 'DUN_MOD_THEMER_SECRET', 'Wh
 if (! defined( "DUN_MOD_THEMER_PATH" ) ) define( 'DUN_MOD_THEMER_PATH', dirname( __FILE__ ) );
 if (! defined( "DUN_MOD_THEMER_VALID" ) ) define( 'DUN_MOD_THEMER_VALID', serialize( array( 'Themer' ) ) );
 if (! defined( "DUN_MOD_THEMER_UPGRADE" ) ) define( 'DUN_MOD_THEMER_UPGRADE', serialize( array( 
-		'1.0.0' => strtotime( '2013-01-01' ), 
+		'1.0.0' =>	'1356998400',	// 2013-01-01 
+		'1.0.1'	=>	'1357776000',	// 2013-01-10
+		'1.0.2'	=>	'1358035200',	// 2013-01-13
+		'1.0.3'	=>	'1358294400',	// 2013-01-16
+		'1.0.4'	=>	'1363219200',	// 2013-03-14
+		'1.0.5'	=>	'1378252800',	// 2013-09-04
 		) ) );
 
 
