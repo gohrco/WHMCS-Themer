@@ -5,10 +5,11 @@ EMAIL=development@gohigheris.com
 URL=https://www.gohigheris.com
 LICENSE=GNU General Public License version 2, or later
 COPYRIGHT=2009 - 2013 Go Higher Information Services.  All rights reserved.
+UPDATE_SITE=https://www.gohigheris.com/updates/whmcsmodules/themer/
 #
 SERIES=1.0
-SHORT=106
-VERSION=1.0.6
+SHORT=107
+VERSION=1.0.7
 #
 MATURITY=stable
 ACCESS=Public
