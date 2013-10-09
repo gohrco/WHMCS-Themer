@@ -11,7 +11,8 @@
 			<echo message="-----------------------------------------------------" />
 			
 		<ioncube_dir />
-			
+		<licensing src="modules/addons/themer/dunamis/license.php" dest="modules/addons/themer/dunamis/license.php" />
+		
 			<echo message=" " />
 			<echo message="Begin Building WHMCS Addon Module" />
 			<echo message="-----------------------------------------------------" />
