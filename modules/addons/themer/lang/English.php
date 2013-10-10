@@ -1,5 +1,37 @@
 <?php
 
+//	------------------------------------------------------------------------
+//	Admin Output - Alert Values
+//	------------------------------------------------------------------------
+//	General Alert Values
+//	------------------------------------------------------------------------
+$lang['alert.success']				= 'Success!';
+$lang['alert.error']				= 'An Error Occurred!';
+$lang['alert.info']					= 'Reminder:';
+$lang['alert.block']				= 'Warning!';
+$lang['alert.dunamis.compatible']	=	'The version of Dunamis you are using is not compatible with this version of WHMCS Themer.  Please upgrade Dunamis.';
+
+//
+//	Licensing Alerts
+//	------------------------------------------------------------------------
+$lang['alert.license.invalid']		= 'Your license is invalid!  Please check your license key before continuing.';
+$lang['alert.license.saved']		= 'License successfully saved.';
+
+//
+//	Configuration Alerts
+//	------------------------------------------------------------------------
+$lang['alert.config.saved']			=	'Configuration settings have been saved!';
+
+//
+//	Theme Saving Alerts
+//	------------------------------------------------------------------------
+$lang['alert.themes.saved']			=	'Changes to your theme have been saved.';
+$lang['alert.themes.addnew']		=	'New theme created!';
+$lang['alert.themes.delete']		=	'Theme deletion successful!';
+$lang['alert.themes.makedefault']	=	'A new theme has been set as the default theme for your site.';
+$lang['alert.themes.copy']			=	'Theme copied successfully!';
+
+
 $lang['form.apply']					= 'Apply Changes';
 $lang['form.saveandclose']			= 'Save and Close';
 $lang['form.close']					= 'Close';

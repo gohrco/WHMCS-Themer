@@ -4,6 +4,15 @@ if (! defined( 'DUN_MOD_THEMER' ) ) define( 'DUN_MOD_THEMER', "@fileVers@" );
 
 class ThemerAdminDunModule extends WhmcsDunModule
 {
+	
+	/**
+	 * Stores the alerts to display back
+	 * @access		protected
+	 * @var			array
+	 * @since		2.0.0
+	 */
+	protected $alerts	= array( 'error' => array(), 'success' => array(), 'info' => array(), 'block' => array() );
+	
 	/**
 	 * Stores the type of module this is
 	 * @access		protected
@@ -68,6 +77,10 @@ class ThemerAdminDunModule extends WhmcsDunModule
 			$this->_saveForm();
 		}
 		
+		if (! version_compare( DUNAMIS, '1.2.0', 'ge' ) ) {
+			$this->setAlert( 'alert.dunamis.compatible', 'error' );
+		}
+		
 		$doc		=   dunloader( 'document', true );
 		$baseurl 	=   get_baseurl( 'themer' );
 		
@@ -79,12 +92,14 @@ class ThemerAdminDunModule extends WhmcsDunModule
 		$title	= $this->_getTitle();
 		$navbar = $this->_getNavigation();
 		$body	= $this->_getBody();
+		$alerts	= $this->buildAlerts();
 		
 		$data	= <<< HTML
 <div style="float:left;width:100%;">
 	<div id="themer">
 		{$title}
 		{$navbar}
+		{$alerts}
 		{$body}
 	</div>
 </div>
@@ -107,6 +122,61 @@ HTML;
 	public function renderAdminSidebar()
 	{
 		return;
+	}
+	
+	
+	/**
+	 * Builds the alerts for display
+	 * @access		protected
+	 * @version		@fileVers@
+	 *
+	 * @return		string containing html formatted output
+	 * @since		1.0.6
+	 */
+	protected function buildAlerts()
+	{
+		$data	= null;
+		$check	= array( 'success', 'error', 'block', 'info' );
+	
+		foreach ( $check as $type ) {
+			if ( empty( $this->alerts[$type] ) ) continue;
+			$data	.=	'<div class="alert alert-' . $type . '"><h4>' . t( 'themer.alert.' . $type ) . '</h4>'
+			.	implode( "<br/>", $this->alerts[$type] )
+			.	'</div>';
+		}
+	
+		return $data;
+	}
+	
+	
+	/**
+	 * Method for setting an alert to the object
+	 * @access		protected
+	 * @version		@fileVers@
+	 * @param		mixed		- $msg: contains an array of items to use for translate or an alert msg string
+	 * @param		string		- $type: indicates which type of alert to set to
+	 * @param		boolean		- $trans: indicates if we should translate (true default)
+	 *
+	 * @since		1.0.6
+	 */
+	protected function setAlert( $msg = array(), $type = 'success', $trans = true )
+	{
+		// If we are passing an array we are assuming:
+		//		first item is string
+		//		rest of items are variables to insert
+		if ( is_array( $msg ) ) {
+			$message = array_shift( $msg );
+			$message = 'themer.'.$message;
+			array_unshift( $msg, $message );
+			$this->alerts[$type][] = call_user_func_array('t', $msg );
+			return;
+		}
+	
+		if ( $trans ) {
+			$msg = t( 'themer.' . $msg );
+		}
+	
+		$this->alerts[$type][] = $msg;
 	}
 	
 	
@@ -443,8 +513,14 @@ HTML;
 			case 'themes' :
 				
 				// Check license and task
-				if (! dunloader( 'license', 'themer' )->isValid() ) return;
-				if (! $input->getVar( 'task', false ) ) return;
+				if (! dunloader( 'license', 'themer' )->isValid() ) {
+					$this->setAlert( 'alert.license.invalid', 'block' );
+					return;
+				}
+				
+				if (! $input->getVar( 'task', false ) ) {
+					return;
+				}
 				
 				$task	= $input->getVar( 'task', 'default' );
 				$tid	= $input->getVar( 'tid', null );
@@ -456,14 +532,20 @@ HTML;
 						
 						$db->setQuery( "INSERT INTO `mod_themer_themes` (`name`, `params` ) VALUES ('" . $input->getVar( 'name', null ) . "', '" . $params . "' ); ");
 						$db->query();
+						
+						$this->setAlert( 'alert.themes.addnew' );
 						break;
 					case 'delete' :
 						$db->setQuery( "DELETE FROM `mod_themer_themes` WHERE `id` = '" . $tid . "'" );
 						$db->query();
+						
+						$this->setAlert( 'alert.themes.delete' );
 						break;
 					case 'makedefault' :
 						$db->setQuery( "UPDATE `mod_themer_settings` SET `value` = '" . $tid . "' WHERE `key` = 'usetheme'" );
 						$db->query();
+						
+						$this->setAlert( 'alert.themes.makedefault' );
 						break;
 					case 'copytheme' :
 						$db->setQuery( "SELECT * FROM `mod_themer_themes` WHERE `id` = '" . $tid . "'" );
@@ -471,6 +553,8 @@ HTML;
 						
 						$db->setQuery( "INSERT INTO `mod_themer_themes` (`name`, `description`, `params` ) VALUES ('" . $theme->name . " (copy)', '" . $theme->description . "', '" . $theme->params . "' ); ");
 						$db->query();
+						
+						$this->setAlert( 'alert.themes.copy' );
 						break;
 						
 					case 'edittheme' :
@@ -510,6 +594,7 @@ HTML;
 						$db->setQuery( "UPDATE `mod_themer_themes` SET `name` = " . $name . ", `description` = " . $desc . ", `params` = " . $paramstring . " WHERE `id` = " . $tid );
 						$db->query();
 						
+						$this->setAlert( 'alert.themes.saved' );
 						break;
 						
 				}	// End Task Switch;
@@ -520,7 +605,10 @@ HTML;
 			case 'config' :
 				
 				// Check license
-				if (! dunloader( 'license', 'themer' )->isValid() ) return;
+				if (! dunloader( 'license', 'themer' )->isValid() ) {
+					$this->setAlert( 'alert.license.invalid', 'block' );
+					return;
+				}
 				
 				$config	= array(
 						'enable' => 'int',
@@ -537,6 +625,9 @@ HTML;
 					$db->setQuery( "UPDATE `mod_themer_settings` SET `value` = " . $db->Quote( $value ) . " WHERE `key` = '{$key}'" );
 					$db->query();
 				}
+				
+				$this->setAlert( 'alert.config.saved' );
+				
 				break;
 			case 'license' :
 				$save = array( 'license' => $input->getVar( 'license', null ), 'localkey' => null );
@@ -545,6 +636,13 @@ HTML;
 					$db->setQuery( "UPDATE `mod_themer_settings` SET `value` = '{$value}' WHERE `key` = '{$key}'" );
 					$db->query();
 				}
+				
+				$this->setAlert( 'alert.license.saved' );
+				
+				if (! dunloader( 'license', 'themer' )->isValid() ) {
+					$this->setAlert( 'alert.license.invalid', 'block' );
+				}
+				
 				break;
 		}
 	}

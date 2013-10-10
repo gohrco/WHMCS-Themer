@@ -218,6 +218,9 @@ class ThemerClientDunModule extends WhmcsDunModule
 		$config->enable	= (bool) $config->enable;
 		if (! $config->enable ) return false;
 		
+		// We have to ensure we are using a compatible version of Dunamis
+		if (! version_compare( DUNAMIS, '1.2.0', 'ge' ) ) return false;
+		
 		// Now lets see if we are restricting by admin user
 		if (! empty( $config->restrictuser ) ) {
 			$sess = $GLOBALS['_SESSION'];
