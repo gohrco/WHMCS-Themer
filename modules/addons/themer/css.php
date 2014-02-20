@@ -149,7 +149,8 @@ body <?php echo $m; ?>,
 }
 
 <?php echo $m; ?>.whmcscontainer,
-<?php echo $m; ?>p {
+<?php echo $m; ?>p,
+<?php echo $m; ?>label {
 	font-family: "<?php echo $fonts->gen; ?>",Helvetica,Arial,sans-serif;
 	font-size: <?php echo $css->txtelemgfsize; ?>px;
 	line-height: <?php echo intval( ( 18 / 13 ) * $css->txtelemgfsize ); ?>px;
