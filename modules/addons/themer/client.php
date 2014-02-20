@@ -270,7 +270,7 @@ class ThemerClientDunModule extends WhmcsDunModule
 		$ip = $GLOBALS['remote_ip'];
 		if ( ( $fonts = $this->_gatherFonts() ) ) {
 			$baseuri	= DunUri :: getInstance( $baseurl );
-			$doc->addStyleSheet( $baseuri->getScheme() . '://fonts.googleapis.com/css?family=' . $fonts . '&userIp=' . $ip . '&key=AIzaSyAIpf_-Sp0uZZl0LcSXSPtgQwnXqFUIAO4' );
+			$doc->addStyleSheet( $baseuri->getScheme() . '://fonts.googleapis.com/css?family=' . $fonts );
 		}
 		
 		$tid = $this->_getActiveTheme( true );
